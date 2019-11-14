@@ -169,7 +169,7 @@ int listDelLast(list *pList)
 
 // ================== Удаление списка ================= //
 
-int listDelete(list *pList)
+int listClear(list *pList)
 {
     struct listNode *current;
 
@@ -201,7 +201,6 @@ int listDelete(list *pList)
     */
     free(pList->pHead);
     pList->size -= 1;
-
-    free(pList);
+    pList->pHead = NULL;
     return 0;
 }

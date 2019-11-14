@@ -24,6 +24,6 @@ int listPrint(list *);     // Вывод на экран значений эле
 int listFilePrint(list *); // Вывод в файл значений элементов списка с их индексами
 
 int listDelLast(list *); // Доп. операция 7
-int listDelete(list *);  // Очистка списка
+int listClear(list *);  // Очистка списка
 
 #endif

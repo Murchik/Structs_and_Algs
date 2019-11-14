@@ -22,7 +22,7 @@ int main()
 
     listSearch(myList, 16);
 
-    listDelete(myList);
+    listClear(myList);
     //system("pause");
     return 0;
 }
