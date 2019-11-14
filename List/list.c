@@ -100,7 +100,7 @@ int listPrint(list *pList)
     printf("List:\n");
     for (int i = 0; i < pList->size; ++i)
     {
-        printf("%3d:%4d\n", i + 1, current->Data);
+        printf("\tlist[%d]:\t%d\n", i, current->Data);
         current = current->pNext;
     }
     return 0;
@@ -124,7 +124,7 @@ int listFilePrint(list *pList)
     fprintf(ptrFile, "List:\n");
     for (int i = 0; i < pList->size; ++i)
     {
-        fprintf(ptrFile, "%3d:%4d\n", i + 1, current->Data);
+        fprintf(ptrFile, "\tlist[%d]:\t%d\n", i, current->Data);
         current = current->pNext;
     }
     fclose(ptrFile);
@@ -139,12 +139,23 @@ int listDelLast(list *pList)
     struct listNode *pHead;
     struct listNode *current;
 
+    // Если список пустой
     if (pList->pHead == NULL)
         return -1;
 
-    // Переходим к предпоследнему элементу списка
+    // Переходим к последнему элементу списка
     current = pList->pHead;
     current = current->pPrev;
+    // Если в списке один элемент
+    if (current == pHead)
+    {
+        free(current->pNext);
+        pList->size -= 1;
+        pList->pHead = NULL;
+        return 0;
+    }
+
+    // Переходим к предпоследнему элементу списка
     current = current->pPrev;
 
     /*
