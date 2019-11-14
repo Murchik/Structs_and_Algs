@@ -35,7 +35,7 @@ int main()
         case 0:
             if (created)
                 listClear(myList);
-            printf("Программа успешно завершена. "); 
+            printf("Программа успешно завершена. ");
             break;
 
         /* Создание списка */
@@ -119,6 +119,6 @@ int main()
             break;
         }
     }
-    system("pause");
+    //system("pause");
     return 0;
 }
