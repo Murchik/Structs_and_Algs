@@ -3,18 +3,20 @@
 
 struct listNode
 {
-    struct listNode *pNext;
-    struct listNode *pPrev;
-    int Data;
+    struct listNode *_pNext;
+    struct listNode *_pPrev;
+    int _Data;
 } listNode;
 
 typedef struct
 {
-    struct listNode *pHead;
-    int size;
+    struct listNode *_pHead;
+    int _size;
 } list;
 
-list *listInit(); // Создание списка
+list *listInit(); // Инициализация списка
+
+int listCreate(list* pList, int maxLength); // Создание списка заданной длины
 
 int listAppend(list *, int); // Доп. операция 4
 

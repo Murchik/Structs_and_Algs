@@ -10,10 +10,16 @@ int main()
     list *myList;
     int action;
     int value;
-    int created;
     setlocale(LC_ALL, "RUS");
 
-    printf("\n------------ Вас приветстует Программа список! ------------\n\n\
+    myList = listInit();
+    if (myList == NULL)
+    {
+        printf("Ошибка создания дескриптора списка!\n");
+        return 0;
+    }
+
+    printf("\n------------ Вас приветстует программа Список! ------------\n\n\
 Выберите желаемое действие:\n\
 \t1 - Создание списка\n\
 \t2 - Добавление нового элемента в конец списка\n\
@@ -24,101 +30,77 @@ int main()
 \t0 - Выход\n");
 
     action = 1;
-    created = 0;
     while (action != 0)
     {
         scanf("%d", &action);
-
-        switch (action)
+        if (action == 0)
         {
-        /* Выход */
-        case 0:
-            if (created)
-                listClear(myList);
+            listClear(myList);
             printf("Программа успешно завершена. ");
             break;
-
-        /* Создание списка */
-        case 1:
-            if (!created)
+        }
+        else if (action == 1)
+        {
+            if(listCreate(myList, MAX_LENGTH) == MAX_LENGTH)
             {
-                myList = listInit();
-                printf("Список успешно создан.\n");
-                created = 1;
+                printf("Список успешно создан\n");
+                listPrint(myList);
             }
             else
-                printf("Список уже создан!\n");
-            break;
-
-        /* Добавление нового элемента в конец списка */
-        case 2:
-            if (!created)
-            {
-                printf("Список не создан!\n");
-                break;
-            }
+                printf("Ошибка при создании списка\n");
+        }
+        else if (action == 2)
+        {
             printf("Введите значение для добавления: ");
             scanf("%d", &value);
-            if (listAppend(myList, value) != 0)
-            {
+            value = listAppend(myList, value);
+            if (value == -1)
                 printf("Ошибка добавления элемента\n");
+            else
+            {
+                printf("Элемент успешно добавлен\n");
+                printf("Просмотренно элементов: %d\n", value);
+                listPrint(myList);
+            }
+        }
+        else if (action == 3)
+        {
+            value = listDelLast(myList);
+            if(value < 0)
+            {
+                printf("Удаление не удалось: попытка удалить элемент из пустого списка!\n");
             }
             else
-                printf("Элемент добавлен.\n");
-            break;
-
-        /* Удаление элемента из конце списка */
-        case 3:
-            if (created == 0)
             {
-                printf("Список не создан!\n");
-                break;
+                printf("Удаление последнего элемента прошло успешно\n");
+                printf("Просмотренно элементов: %d\n", value);
+                listPrint(myList);
             }
-            listDelLast(myList);
-            printf("Последний элемент удалён.\n");
-            break;
-
-        /* Вывод на экран */
-        case 4:
-            if (created == 0)
-            {
-                printf("Список не создан!\n");
-                break;
-            }
-            if (listPrint(myList) != 0)
-                printf("Список пуст!\n");
-            break;
-
-        /* Поиск заданного значения */
-        case 5:
-            if (created == 0)
-            {
-                printf("Список не создан!\n");
-                break;
-            }
+        }
+        else if (action == 4)
+        {
+            if(listPrint(myList) == -1)
+                printf("Попытка распечатать пустой список!\n");
+        }
+        else if (action == 5)
+        {
             printf("Введите значение для поиска: ");
             scanf("%d", &value);
-            if (listSearch(myList, value) != 0)
-                printf("Элементов с таким значением не найдено\n");
-            break;
-
-        /* Очистка списка */
-        case 6:
-            if (created == 0)
-            {
-                printf("Список не создан!\n");
-                break;
-            }
+            value = listSearch(myList, value);
+            if (value < 0)
+                printf("Элемент с данным значением найти не удалось.\n");
+            else
+                printf("Просмотренно элементов: %d\n", value);
+        }
+        else if (action == 6)
+        {
             listClear(myList);
             printf("Список успешно очищен\n");
-            break;
-
-        /* Неизвестная команда */
-        default:
-            printf("Введена неизвестная команда!\n");
-            break;
         }
+        else
+            printf("Введена неизвестная команда!\n");
     }
-    //system("pause");
+    listClear(myList);
+    system("pause");
     return 0;
 }

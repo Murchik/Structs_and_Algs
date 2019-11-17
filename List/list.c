@@ -3,43 +3,77 @@
 #include "list.h"
 
 // =============== Инициализация списка =============== //
-
+/*  
+    В случае успешного создания дескриптора
+    возвращает указатель на него,
+    в противном случае возвращает NULL
+*/
 list *listInit()
 {
-    list *rez;
+    list *newList = NULL;
+    int value;
 
-    rez = (list *)malloc(sizeof(list));
-    if (rez == NULL)
+    newList = (list *)malloc(sizeof(list));
+    if (newList == NULL)
         return NULL;
 
-    rez->pHead = NULL;
-    rez->size = 0;
-    return rez;
+    newList->_pHead = NULL;
+    newList->_size = 0;
+
+    return newList;
+}
+
+// === Создание списка с заданным кол-вом элементов === //
+/*
+    Возвращает кол-во успешно добавленных элементов
+*/
+int listCreate(list *pList, int maxLength)
+{
+    int value;
+    int i;
+
+    listClear(pList);
+    for (i = 0; i < maxLength; ++i)
+    {
+        value = rand() % 100;
+        if(listAppend(pList, value) == -1)
+            return i;
+    }
+
+    return i;
 }
 
 // ================ Добавление в конец ================ //
-
+/*
+    Возвращает кол-во элементов списка
+    просмотренных данной операцией,
+    если добавить новый элемент не удалось
+    возвращает -1
+*/
 int listAppend(list *pList, int vaule)
 {
-    struct listNode *newNode;
-    struct listNode *current;
+    struct listNode *newNode = NULL;
+    struct listNode *current = NULL;
+    int transCount;
 
+    transCount = 0;
     // Если в списке нет ни одного элемента
-    if (pList->pHead == NULL)
+    if (pList->_pHead == NULL)
     {
         newNode = (struct listNode *)malloc(sizeof(struct listNode));
         if (newNode == NULL)
             return -1;
 
-        // Создание нового элемента списка
-        pList->pHead = newNode;
-        newNode->pPrev = pList->pHead;
-        newNode->pNext = pList->pHead;
-        newNode->Data = vaule;
-        pList->size += 1;
+        pList->_pHead = newNode;
+        newNode->_pPrev = pList->_pHead;
+        newNode->_pNext = pList->_pHead;
+        newNode->_Data = vaule;
+        pList->_size += 1;
     }
     else
     {
+        current = pList->_pHead;
+        
         newNode = (struct listNode *)malloc(sizeof(struct listNode));
         if (newNode == NULL)
             return -1;
@@ -48,84 +82,110 @@ int listAppend(list *pList, int vaule)
             Указатель на след. элемент у последнего элемента списка
             заменяем на указатель на новый элемент
         */
-        current = pList->pHead;
-        current = current->pPrev;
-        current->pNext = newNode;
+        current = current->_pPrev;
+        transCount += 1;
+        current->_pNext = newNode;
 
-        // Создание нового элемента списка
-        newNode->pNext = pList->pHead;
-        newNode->pPrev = current;
-        newNode->Data = vaule;
-        pList->size += 1;
+        // Инициализирование полей нового элемента списка
+        newNode->_pNext = pList->_pHead;
+        newNode->_pPrev = current;
+        newNode->_Data = vaule;
+        pList->_size += 1;
 
         /*
             Указатель на пред. элемент у первого элемента списка
             заменяем на указатель на новый элемент
         */
-        current = pList->pHead;
-        current->pPrev = newNode;
+        current = pList->_pHead;
+        transCount += 1;
+        current->_pPrev = newNode;
     }
-    return 0;
+    return transCount;
 }
 
 // ======= Поиск элемента с заданным значением ======== //
-
+/*
+    Возвращает кол-во элементов списка
+    просмотренных данной операцией,
+    если список пуст возвращает -1,
+    если заданного элемента обнаружить не удалось
+    возвращает -2
+*/
 int listSearch(list *pList, int value)
 {
-    struct listNode *current;
-    if (pList->pHead == NULL)
+    struct listNode *current = NULL;
+    int transCount;
+    int found;
+
+    found = 0;
+    transCount = 0;
+    if (pList->_pHead == NULL)
         return -1;
 
-    current = pList->pHead;
-    for (int i = 0; i < pList->size; ++i)
+    current = pList->_pHead;
+    for (int i = 0; i < pList->_size; ++i)
     {
-        if (current->Data == value)
-            printf("Found the element list[%d]:\t%d\n", i, current->Data);
-        current = current->pNext;
+        if (current->_Data == value)
+        {
+            printf("Found the element list[%d]:\t%d\n", i, current->_Data);
+            found = 1;
+        }
+        current = current->_pNext;
+        transCount += 1;
     }
-
-    return 0;
+    if(found)
+        return transCount;
+    else
+        return -2;
 }
 
 // ================ Распечатка списка ================= //
-
+/*
+    Возвращает 0 при успешной распечатке списка,
+    если список пуст возвращает -1
+*/
 int listPrint(list *pList)
 {
-    struct listNode *current;
+    struct listNode *current = NULL;
 
-    if (pList->pHead == NULL)
+    if (pList->_pHead == NULL)
         return -1;
 
-    current = pList->pHead;
+    current = pList->_pHead;
     printf("List:\n");
-    for (int i = 0; i < pList->size; ++i)
+    for (int i = 0; i < pList->_size; ++i)
     {
-        printf("\tlist[%d]:\t%d\n", i, current->Data);
-        current = current->pNext;
+        printf("\tlist[%d]:\t%d\n", i, current->_Data);
+        current = current->_pNext;
     }
     return 0;
 }
 
 // ============= Распечатка списка в файл ============= //
-
+/*
+    Возвращает 0 при успешной распечатке списка,
+    если список пуст возвращает -1,
+    если создать выходной файл не удалось
+    возвращает -2
+*/
 int listFilePrint(list *pList)
 {
-    struct listNode *current;
-    FILE *ptrFile;
+    struct listNode *current = NULL;
+    FILE *ptrFile = NULL;
 
-    if (pList->pHead == NULL)
+    if (pList->_pHead == NULL)
         return -1;
 
     ptrFile = fopen("list.txt", "wt");
     if (ptrFile == NULL)
         return -2;
 
-    current = pList->pHead;
+    current = pList->_pHead;
     fprintf(ptrFile, "List:\n");
-    for (int i = 0; i < pList->size; ++i)
+    for (int i = 0; i < pList->_size; ++i)
     {
-        fprintf(ptrFile, "\tlist[%d]:\t%d\n", i, current->Data);
-        current = current->pNext;
+        fprintf(ptrFile, "\tlist[%d]:\t%d\n", i, current->_Data);
+        current = current->_pNext;
     }
     fclose(ptrFile);
 
@@ -133,85 +193,105 @@ int listFilePrint(list *pList)
 }
 
 // ================ Удаление последнего =============== //
-
+/*
+    Возвращает кол-во элементов списка
+    просмотренных данной операцией,
+    если список пуст возвращает -1
+*/
 int listDelLast(list *pList)
 {
-    struct listNode *pHead;
-    struct listNode *current;
+    struct listNode *pHead = NULL;
+    struct listNode *current = NULL;
+    int transCount;
 
+    transCount = 0;
     // Если список пустой
-    if (pList->pHead == NULL)
+    if (pList->_pHead == NULL)
         return -1;
+    
+    current = pList->_pHead;
 
     // Переходим к последнему элементу списка
-    current = pList->pHead;
-    current = current->pPrev;
+    current = current->_pPrev;
+    transCount += 1;
+
     // Если в списке один элемент
-    if (current == pHead)
+    if (current == pList->_pHead)
     {
-        free(current->pNext);
-        pList->size -= 1;
-        pList->pHead = NULL;
-        return 0;
+        free(current->_pNext);
+        pList->_size -= 1;
+        pList->_pHead = NULL;
+        return transCount;
     }
 
     // Переходим к предпоследнему элементу списка
-    current = current->pPrev;
+    current = current->_pPrev;
+    transCount += 1;
 
     /*
         Указатель на предыдущий элемент у первого элемента списка
         заменяем на указатель предпоследнего элемента
     */
-    pHead = pList->pHead;
-    pHead->pPrev = current;
+    pHead = pList->_pHead;
+    pHead->_pPrev = current;
 
     // Удаляем последний элемент списка
-    free(current->pNext);
-    pList->size -= 1;
+    free(current->_pNext);
+    pList->_size -= 1;
 
     /*
         Указатель на следующий элемент у предпоследнего элемента списка
         заменяем на указатель первого элемента (его голову)
     */
-    current->pNext = pList->pHead;
+    current->_pNext = pList->_pHead;
 
-    return 0;
+    return transCount;
 }
 
 // ================== Удаление списка ================= //
-
+/*
+    Возвращает кол-во элементов списка
+    просмотренных данной операцией,
+    если список пуст возвращает -1
+*/
 int listClear(list *pList)
 {
-    struct listNode *current;
+    struct listNode *current = NULL;
+    int transCount;
 
-    if (pList->pHead == NULL)
+    transCount = 0;
+    if (pList->_pHead == NULL)
         return -1;
+
+    current = pList->_pHead;
 
     /*
         Указатель на текущий элемент
         переместить на последний эл. списка
     */
-    current = pList->pHead;
-    current = current->pPrev;
+    current = current->_pPrev;
+    transCount += 1;
 
     /*
         Пока в списке не останется один элемент
         (Первый элемент списка, его голова)
         переходим к предыдущему элементу и удаляем следующий
     */
-    while (current != pList->pHead)
+    while (current != pList->_pHead)
     {
-        current = current->pPrev;
-        free(current->pNext);
-        pList->size -= 1;
+        current = current->_pPrev;
+        transCount += 1;
+        free(current->_pNext);
+        pList->_size -= 1;
     }
 
     /* 
         Удаляем последний оставшийся элемент
         (Первый элемент списка, его голова)
     */
-    free(pList->pHead);
-    pList->size -= 1;
-    pList->pHead = NULL;
-    return 0;
+    free(pList->_pHead);
+    pList->_size -= 1;
+    pList->_pHead = NULL;
+    
+    return transCount;
 }
