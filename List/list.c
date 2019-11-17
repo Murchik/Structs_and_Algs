@@ -27,13 +27,13 @@ list *listInit()
 /*
     Возвращает кол-во успешно добавленных элементов
 */
-int listCreate(list *pList, int maxLength)
+int listCreate(list *pList, int amount)
 {
     int value;
     int i;
 
     listClear(pList);
-    for (i = 0; i < maxLength; ++i)
+    for (i = 0; i < amount; ++i)
     {
         value = rand() % 100;
         if(listAppend(pList, value) == -1)

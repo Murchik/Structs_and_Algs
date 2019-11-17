@@ -1,76 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "stack.h"
 
-struct stackEl
+// ============== Инициализация стека ================= //
+
+stack_t *stackInit()
 {
-    struct stackEl *pNext;
-    int Data;
-};
+    stack_t *newStack = NULL;
 
-typedef struct stack
-{
-    struct stackEl *pTop;
-} stack_t;
-
-#define MAX_LENGTH 19
-
-stack_t *stackInit();
-int stackDelete(stack_t *);
-int push(stack_t *, int);
-int pop(stack_t *);
-int stackPrint(stack_t *);
-
-// ==================================================== //
-
-int main()
-{
-    stack_t *MyStack = stackInit();
-    
-    for(int i = 0; i < MAX_LENGTH; ++i)
-        push(MyStack, rand() % 100);
-
-    stackPrint(MyStack);
-
-    stackDelete(MyStack);
-    //system("pause");
-    return 0;
+    newStack = (stack_t *)malloc(sizeof(stack_t));
+    if (newStack != NULL)
+        newStack->_pTop = NULL;
+    return newStack;
 }
 
 // ================= Создание стека =================== //
 
-stack_t *stackInit()
+int stackCreate(stack_t * pStack, int amount)
 {
-    stack_t *rez;
+    int value;
+    int i;
 
-    rez = (stack_t *)malloc(sizeof(stack_t));
-    if (rez != NULL)
-        rez->pTop = NULL;
-    return rez;
+    stackClear(pStack);
+    for(i = 0; i < amount; ++i)
+    {
+        value = rand() % 100;
+        if(push(pStack, value) == -1)
+            return i;
+    }
+    return i;
 }
 
 // ============ Включение нового элемента ============= //
 
 int push(stack_t *pStack, int value)
 {
-    struct stackEl *newEl;
+    struct stackEl *newEl = NULL;
 
-    if (pStack->pTop == NULL)
+    if (pStack->_pTop == NULL)
     {
         newEl = (struct stackEl *)malloc(sizeof(struct stackEl));
         if (newEl == NULL)
             return -1;
-        newEl->Data = value;
-        newEl->pNext = NULL;
-        pStack->pTop = newEl;
+        newEl->_data = value;
+        newEl->_pNext = NULL;
+        pStack->_pTop = newEl;
     }
     else
     {
         newEl = (struct stackEl *)malloc(sizeof(struct stackEl));
         if (newEl == NULL)
             return -1;
-        newEl->Data = value;
-        newEl->pNext = pStack->pTop;
-        pStack->pTop = newEl;
+        newEl->_data = value;
+        newEl->_pNext = pStack->_pTop;
+        pStack->_pTop = newEl;
     }
     return 0;
 }
@@ -79,50 +62,54 @@ int push(stack_t *pStack, int value)
 
 int pop(stack_t *pStack)
 {
-    struct stackEl *currEl;
-    int rez;
+    struct stackEl *currEl = NULL;
+    int result;
 
-    if (pStack->pTop == NULL)
+    if (pStack->_pTop == NULL)
         return 0;
-    currEl = pStack->pTop;
-    rez = currEl->Data;
-    pStack->pTop = currEl->pNext;
+    currEl = pStack->_pTop;
+    result = currEl->_data;
+    pStack->_pTop = currEl->_pNext;
     free(currEl);
-    return rez;
+    return result;
 }
 
 // === Вывод на экран значений стека с их индексами === //
 
 int stackPrint(stack_t *pStack)
 {
-    struct stackEl *currEl;
-    struct stackEl *ptrTop;
+    struct stackEl *currEl = NULL;
+    struct stackEl *ptrTop = NULL;
 
-    ptrTop = pStack->pTop;
-    currEl = pStack->pTop;
+    if(pStack->_pTop == NULL)
+        return -1;
+    ptrTop = pStack->_pTop;
+    currEl = pStack->_pTop;
+    printf("Stack:\n");
     for (int i = 0; currEl != NULL; ++i)
     {
-        pStack->pTop = currEl->pNext;
-        printf("stack[%d]:\t%d\n", i, currEl->Data);
-        currEl = pStack->pTop;
+        pStack->_pTop = currEl->_pNext;
+        printf("stack[%d]:\t%d\n", i, currEl->_data);
+        currEl = pStack->_pTop;
     }
-    pStack->pTop = ptrTop;
+    pStack->_pTop = ptrTop;
     return 0;
 }
 
-// ================ Очистка списка ==================== //
+// ================ Очистка стека ==================== //
 
-int stackDelete(stack_t *pStack)
+int stackClear(stack_t *pStack)
 {
-    struct stackEl *currEl;
+    struct stackEl *currEl = NULL;
 
-    currEl = pStack->pTop;
+    if(pStack->_pTop == NULL)
+        return -1;
+    currEl = pStack->_pTop;
     while (currEl != NULL)
     {
-        pStack->pTop = currEl->pNext;
+        pStack->_pTop = currEl->_pNext;
         free(currEl);
-        currEl = pStack->pTop;
+        currEl = pStack->_pTop;
     }
-    free(pStack);
     return 0;
 }
