@@ -15,19 +15,20 @@ int searchQ(_array **arr, int key);
 int searchT(_array **arr, int key);
 int searchB(_array **arr, int key);
 
+const int keys[N] = {17, 14, 11, 3, 4, 6, 12, 16, 10, 2, 7, 1, 13, 8, 15, 9, 5, 0};
+
 int main()
 {
     int key;
     _array **Array;
-
     Array = (_array **)malloc((N + 1) * sizeof(_array *));
     for (int i = 0; i < N + 1; ++i)
     {
         Array[i] = (_array *)malloc(sizeof(_array));
         Array[i]->_data = rand() % 100;
-        Array[i]->_key = rand() % 19;
+        Array[i]->_key = keys[i];
     }
-
+    system("color F0");
     printf("Array:\n");
     printArr(Array);
 
@@ -102,10 +103,10 @@ int searchS(_array **Array, int key)
         comp += 1;
     }
     if (count != 0)
-        printf("\tSearch was a success. Iterations: %d\n", i);
+        printf("\tSearch was a success.");
     else
         printf("\tThe search was unsuccessful: No items with such keys.\n");
-    printf("\tComparisons: %d\n", comp);
+    printf("\tComparisons: %d\tIterations: %d\n", comp, i);
     return 0;
 }
 
@@ -121,14 +122,14 @@ int searchQ(_array **Array, int key)
 
     for (i = 0; Array[i]->_key != key; ++i)
         comp += 1;
-    if (i <= N)
+    if (i < N)
     {
-        printf("\tElement found: Array[%d] = %d\n", i, Array[i]->_data);
-        printf("\tSearch was a success. Iterations: %d\n", i);
+        printf("\tSearch was a success");
+        printf(" Element found: Array[%d] = %d\n", i, Array[i]->_data);
     }
     else
         printf("\tThe search was unsuccessful: No items with such keys.\n");
-    printf("\tComparisons: %d\n", comp);
+    printf("\tComparisons: %d\tIterations: %d\n", comp, i);
     return 0;
 }
 
@@ -143,12 +144,12 @@ int searchT(_array **Array, int key)
         comp += 1;
     if (key == Array[i]->_key)
     {
-        printf("\tElement found: Array[%d] = %d\n", i, Array[i]->_data);
-        printf("\tSearch was a success. Iterations: %d\n", i);
+        printf("\tSearch was a success.");
+        printf(" Element found: Array[%d] = %d\n", i, Array[i]->_data);
     }
     else
         printf("\tThe search was unsuccessful: No items with such keys.\n");
-    printf("\tComparisons: %d\n", comp);
+    printf("\tComparisons: %d\tIterations: %d\n", comp, i);
     return 0;
 }
 
@@ -181,11 +182,11 @@ int searchB(_array **Array, int key)
     }
     if (count != 0)
     {
+        printf("\tSearch was a success");
         printf("\tElement found: Array[%d] = %d\n", i, Array[i]->_data);
-        printf("\tSearch was a success. Iterations: %d\n", j);
     }
     else
         printf("\tThe search was unsuccessful: No items with such keys.\n");
-    printf("\tComparisons: %d\n", comp);
+    printf("\tComparisons: %d\tIterations: %d\n", comp, j);
     return 0;
 }
