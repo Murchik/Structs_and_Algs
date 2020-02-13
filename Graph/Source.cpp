@@ -15,7 +15,7 @@ int main()
 {
     int n, m;
     cin >> n >> m;
-    
+
     Graph graph(n);
 
     for (int i = 0; i < m; ++i) 
