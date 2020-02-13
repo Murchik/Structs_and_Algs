@@ -19,10 +19,10 @@ const int keys[N] = {17, 14, 11, 3, 4, 6, 12, 16, 10, 2, 7, 1, 13, 8, 15, 9, 5, 
 
 int main()
 {
-    int key;
+    int key, i;
     _array **Array;
     Array = (_array **)malloc((N + 1) * sizeof(_array *));
-    for (int i = 0; i < N + 1; ++i)
+    for (i = 0; i < N + 1; ++i)
     {
         Array[i] = (_array *)malloc(sizeof(_array));
         Array[i]->_data = rand() % 100;
@@ -43,7 +43,7 @@ int main()
     searchT(Array, key);
     searchB(Array, key);
 
-    for (int i = 0; i < N + 1; ++i)
+    for (i = 0; i < N + 1; ++i)
     {
         free(Array[i]);
     }
@@ -54,7 +54,8 @@ int main()
 
 int printArr(_array **Array)
 {
-    for (int i = 0; i < N; ++i)
+    int i;
+    for (i = 0; i < N; ++i)
         printf("Array[%d]:\tData = %3d, Key = %2d\n", i, Array[i]->_data, Array[i]->_key);
     return 0;
 }
