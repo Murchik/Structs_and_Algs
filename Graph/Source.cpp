@@ -49,6 +49,7 @@ vector<int> TopSort(const Graph &graph)
 // disjoint-set / union–find data structure
 class DSU
 {
+    public:
     vector<size_t> leaders;
     vector<size_t> sizes;
     DSU(size_t n) : leaders(n), sizes(n, 1)
@@ -102,6 +103,8 @@ void edgesPrint(const vector<undirectedEdge> &tree)
     }
 }
 
+bool comp(undirectedEdge first, undirectedEdge second) { return (first.weight < second.weight); }
+
 int main()
 {
     ifstream fin("graph.txt", ifstream::in);
@@ -111,7 +114,7 @@ int main()
         return -1;
     }
 
-    int n; // number of vertices
+    size_t n; // number of vertices
     int m; // number of edges
     fin >> n >> m;
 
@@ -153,6 +156,15 @@ int main()
         cout << distances[i] << " ";
     }
     cout << endl;
+
+    DSU set(n);
+    sort(edges.begin(), edges.end(), comp);
+
+    for (int i = 0; i < m; ++i)
+    {
+        if (set.join(edges[i].from, edges[i].to))
+            cout << edges[i].from << " " << edges[i].to << " " << edges[i].weight << endl;
+    }
 
     return 0;
 }
