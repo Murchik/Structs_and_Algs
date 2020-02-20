@@ -50,6 +50,7 @@ void GraphPrint(const Graph &graph)
         }
         cout << endl;
     }
+    cout << endl;
 }
 
 void makeUndirected(Graph &graph)
@@ -80,9 +81,30 @@ void makeUndirected(Graph &graph)
     }
 }
 
+void edgesSort(Graph &graph)
+{
+    size_t n = graph.size();
+    for (size_t i = 0; i < n; ++i)
+    {
+        size_t m = graph[i].size();
+        for (size_t j = 0; j < m; ++j)
+        {
+            for (size_t k = 0; k < m - 1; ++k)
+            {
+                if (graph[i][k].weight > graph[i][k + 1].weight)
+                {
+                    Edge tmp;
+                    tmp = graph[i][k];
+                    graph[i][k] = graph[i][k + 1];
+                    graph[i][k + 1] = tmp;
+                }
+            }
+        }
+    }
+}
+
 int main()
 {
-    size_t i;
     int n; // number of vertices
     int m; // number of edges
     int origin;
@@ -98,7 +120,7 @@ int main()
     }
     fin >> n >> m;
     Graph graph(n), graph_reverse(n);
-    for (i = 0; i < m; ++i)
+    for (size_t i = 0; i < m; ++i)
     {
         fin >> origin >> destination >> weight;
         graph[origin].push_back({destination, weight});
@@ -118,13 +140,16 @@ int main()
         }
     }
 
-    for (i = 0; i < n; ++i)
+    for (size_t i = 0; i < n; ++i)
     {
         cout << distances[i] << " ";
     }
     cout << endl;
-
+    
+    //GraphPrint(graph);
     makeUndirected(graph);
+    //GraphPrint(graph);
+    edgesSort(graph);
     //GraphPrint(graph);
 
     return 0;
