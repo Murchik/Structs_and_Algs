@@ -99,11 +99,15 @@ void edgesPrint(const vector<undirectedEdge> &tree)
     int n = tree.size();
     for (int i = 0; i < n; i++)
     {
-        cout << tree[i].from << " " << tree[i].to << " " << tree[i].weight << endl;
+        cout << tree[i].from << " "
+             << tree[i].to << " "
+             << tree[i].weight 
+             << endl;
     }
 }
 
-bool comp(undirectedEdge first, undirectedEdge second) { return (first.weight < second.weight); }
+bool comp(undirectedEdge first, undirectedEdge second) 
+    { return (first.weight < second.weight); }
 
 int main()
 {
@@ -114,7 +118,7 @@ int main()
         return -1;
     }
 
-    size_t n; // number of vertices
+    int n; // number of vertices
     int m; // number of edges
     fin >> n >> m;
 
@@ -163,7 +167,10 @@ int main()
     for (int i = 0; i < m; ++i)
     {
         if (set.join(edges[i].from, edges[i].to))
-            cout << edges[i].from << " " << edges[i].to << " " << edges[i].weight << endl;
+            cout << edges[i].from << " " 
+                 << edges[i].to << " " 
+                 << edges[i].weight 
+                 << endl;
     }
 
     return 0;
