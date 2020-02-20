@@ -46,7 +46,7 @@ vector<int> TopSort(const Graph &graph)
     return sorted;
 }
 
-// disjoint-set / unionвЂ“find data structure
+// disjoint-set / union–find data structure
 class DSU
 {
     public:
@@ -111,7 +111,9 @@ bool comp(undirectedEdge first, undirectedEdge second)
 
 int main()
 {
-    ifstream fin("graph.txt", ifstream::in);
+    ifstream fin;
+    fin.open("graph.txt", ifstream::in);
+    //fin.open("C:\\Users\\Касаткины\\source\\repos\\Structs_and_Algs\\Graph\\graph.txt");
     if (!fin.is_open())
     {
         cout << "Error opening file" << endl;
@@ -145,7 +147,7 @@ int main()
     int cur_distance;
     sorted = TopSort(graph);
     distances[sorted[0]] = 0;
-    for (auto v : sorted)
+    for (auto v : sorted) // relaxation of ribs in accordance with the sorting
     {
         for (auto u : graph_reverse[v])
         {
@@ -155,9 +157,9 @@ int main()
         }
     }
 
-    cout << "Р—Р°РґР°РЅРёРµ 1."<< endl
-         << "Р”Р°Р»РµРµ РїСЂРёРІРµРґРµРЅС‹ РєСЂР°С‚С‡Р°Р№С€РёРµ СЂР°СЃСЃС‚РѕСЏРЅРёСЏ РѕС‚ РїРѕСЃР»РµРґРЅРµР№ РёР· РІРµСЂС€РёРЅ "
-         << "Рє РєР°Р¶РґРѕР№ РёР· РїСЂРµРґС‹РґСѓС‰РёС… (СЃРїСЂР°РІР° РЅР°Р»РµРІРѕ):" << endl;
+    cout << "Задание 1."<< endl
+         << "Далее приведены кратчайшие расстояния от последней из вершин "
+         << "к каждой из предыдущих (справа налево):" << endl;
     for (int i = 0; i < n; ++i)
     {
         cout << distances[i] << " ";
@@ -167,11 +169,11 @@ int main()
     DSU set(n);
     sort(edges.begin(), edges.end(), comp);
 
-    cout << "Р—Р°РґР°РЅРёРµ 2." << endl
-         << "Р”Р°Р»РµРµ РїСЂРёРІРµРґРµРЅС‹ СЂС‘Р±СЂР° РїРѕР»СѓС‡РµРЅРЅРѕРіРѕ РѕСЃС‚РѕРІРЅРѕРіРѕ РіСЂР°С„Р°. "
-         << "РџРµСЂРІРѕРµ С‡РёСЃР»Рѕ РІРµСЂС€РёРЅР° РёР· РєРѕС‚РѕСЂРѕР№ РІС‹С…РѕРґРёС‚ СЂРµР±СЂРѕ, "
-         << "РІС‚РѕСЂРѕРµ - РІ РєРѕС‚РѕСЂСѓСЋ РІС…РѕРґРёС‚, "
-         << "С‚СЂРµС‚СЊРµ - РІРµСЃ СЂРµР±СЂР°." << endl; 
+    cout << "Задание 2." << endl
+         << "Далее приведены рёбра полученного остовного графа. "
+         << "Первое число вершина из которой выходит ребро, "
+         << "второе - в которую входит, "
+         << "третье - вес ребра." << endl; 
     for (int i = 0; i < m; ++i)
     {
         if (set.join(edges[i].from, edges[i].to))
