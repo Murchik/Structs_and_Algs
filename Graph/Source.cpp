@@ -2,19 +2,27 @@
 #include <fstream>
 #include <limits>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
-struct Edge // дуга графа 
+struct Edge
 {
+    int to;
+    int weight;
+};
+
+struct undirectedEdge
+{
+    int from;
     int to;
     int weight;
 };
 
 using Graph = vector<vector<Edge>>;
 
-
-void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)// Depth-first search
+// Depth-first search
+void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)
 {
     Used[start] = true;
     for (auto it : graph[start])
@@ -25,7 +33,8 @@ void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)//
     List.push_back(start);
 }
 
-vector<int> TopSort(const Graph &graph) // сортировка вершин
+// Topological sort
+vector<int> TopSort(const Graph &graph)
 {
     vector<int> sorted;
     vector<bool> Used(graph.size());
@@ -37,7 +46,38 @@ vector<int> TopSort(const Graph &graph) // сортировка вершин
     return sorted;
 }
 
-void GraphPrint(const Graph &graph)
+// disjoint-set / union–find data structure
+class DSU
+{
+    vector<size_t> leaders;
+    vector<size_t> sizes;
+    DSU(size_t n) : leaders(n), sizes(n, 1)
+    {
+        size_t size = leaders.size();
+        for (size_t i = 0; i < size; ++i)
+            leaders[i] = i;
+    }
+    size_t find(size_t v)
+    {
+        if (leaders[v] != v)
+            leaders[v] = find(leaders[v]);
+        return leaders[v];
+    }
+    bool join(size_t u, size_t v)
+    {
+        u = find(u);
+        v = find(v);
+        if (u == v)
+            return false;
+        if (sizes[u] < sizes[v])
+            leaders[u] = v;
+        else
+            leaders[v] = u;
+        return true;
+    }
+};
+
+void graphPrint(const Graph &graph)
 {
     size_t n = graph.size();
     for (size_t i = 0; i < n; ++i)
@@ -53,82 +93,50 @@ void GraphPrint(const Graph &graph)
     cout << endl;
 }
 
-void makeUndirected(Graph &graph)
+void edgesPrint(const vector<undirectedEdge> &tree)
 {
-    bool directed;
-    int curr;
-    int n = graph.size();
-    for (int i = 0; i < n; ++i)
+    int n = tree.size();
+    for (int i = 0; i < n; i++)
     {
-        int m = graph[i].size();
-        for (int j = 0; j < m; ++j)
-        {
-            curr = graph[i][j].to;
-            directed = true;
-            int p = graph[curr].size();
-            for (int k = 0; k < p; ++k)
-            {
-                if (graph[curr][k].to == i)
-                {
-                    directed = false;
-                }
-            }
-            if (directed)
-            {
-                graph[curr].push_back({i, graph[i][j].weight});
-            }
-        }
-    }
-}
-
-void edgesSort(Graph &graph)
-{
-    size_t n = graph.size();
-    for (size_t i = 0; i < n; ++i)
-    {
-        size_t m = graph[i].size();
-        for (size_t j = 0; j < m; ++j)
-        {
-            for (size_t k = 0; k < m - 1; ++k)
-            {
-                if (graph[i][k].weight > graph[i][k + 1].weight)
-                {
-                    Edge tmp;
-                    tmp = graph[i][k];
-                    graph[i][k] = graph[i][k + 1];
-                    graph[i][k + 1] = tmp;
-                }
-            }
-        }
+        cout << tree[i].from << " " << tree[i].to << " " << tree[i].weight << endl;
     }
 }
 
 int main()
 {
-    int n; // number of vertices
-    int m; // number of edges
-    int origin;
-    int destination;
-    int weight;
-    int cur_distance;
-
     ifstream fin("graph.txt", ifstream::in);
     if (!fin.is_open())
     {
         cout << "Error opening file" << endl;
         return -1;
     }
+
+    int n; // number of vertices
+    int m; // number of edges
     fin >> n >> m;
+
     Graph graph(n), graph_reverse(n);
-    for (size_t i = 0; i < m; ++i)
+    vector<undirectedEdge> edges(m);
+    vector<int> sorted;
+    vector<int> distances(n, numeric_limits<int>::max());
+    int origin;
+    int destination;
+    int weight;
+
+    for (int i = 0; i < m; ++i)
     {
         fin >> origin >> destination >> weight;
+
+        edges[i].from = origin;
+        edges[i].to = destination;
+        edges[i].weight = weight;
+
         graph[origin].push_back({destination, weight});
         graph_reverse[destination].push_back({origin, weight});
     }
-    //GraphPrint(graph);
-    vector<int> sorted = TopSort(graph);
-    vector<int> distances(n, numeric_limits<int>::max());
+
+    int cur_distance;
+    sorted = TopSort(graph);
     distances[sorted[0]] = 0;
     for (auto v : sorted)
     {
@@ -140,17 +148,11 @@ int main()
         }
     }
 
-    for (size_t i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
     {
         cout << distances[i] << " ";
     }
     cout << endl;
-    
-    //GraphPrint(graph);
-    makeUndirected(graph);
-    //GraphPrint(graph);
-    edgesSort(graph);
-    //GraphPrint(graph);
 
     return 0;
 }
