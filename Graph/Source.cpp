@@ -155,23 +155,31 @@ int main()
         }
     }
 
+    cout << "Задание 1."<< endl
+         << "Далее приведены кратчайшие расстояния от последней из вершин "
+         << "к каждой из предыдущих (справа налево):" << endl;
     for (int i = 0; i < n; ++i)
     {
         cout << distances[i] << " ";
     }
-    cout << endl;
+    cout << endl << endl;
 
     DSU set(n);
     sort(edges.begin(), edges.end(), comp);
 
+    cout << "Задание 2." << endl
+         << "Далее приведены рёбра полученного остовного графа. "
+         << "Первое число вершина из которой выходит ребро, "
+         << "второе - в которую входит, "
+         << "третье - вес ребра." << endl; 
     for (int i = 0; i < m; ++i)
     {
         if (set.join(edges[i].from, edges[i].to))
-            cout << edges[i].from << " " 
-                 << edges[i].to << " " 
-                 << edges[i].weight 
-                 << endl;
+            printf(" %3d %3d %2d\n", 
+                    edges[i].from, 
+                    edges[i].to, 
+                    edges[i].weight);
     }
-
+    cout << endl << endl;
     return 0;
 }
