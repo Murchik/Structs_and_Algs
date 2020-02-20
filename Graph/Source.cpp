@@ -4,7 +4,7 @@
 #include <limits>
 using namespace std;
 
-struct Edge
+struct Edge // дуга графа 
 {
     int to;
     int weight;
@@ -12,8 +12,8 @@ struct Edge
 
 using Graph = vector<vector<Edge>>;
 
-// Depth-first search
-void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)
+
+void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)// Depth-first search
 {
     Used[start] = true;
 
@@ -25,7 +25,7 @@ void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)
     List.push_back(start);
 }
 
-vector<int> TopSort(const Graph &graph)
+vector<int> TopSort(const Graph &graph) // сортировка вершин
 {
     vector<int> sorted;
     vector<bool> Used(graph.size());
@@ -39,14 +39,16 @@ vector<int> TopSort(const Graph &graph)
 
 int main()
 {
-    int n; // ����� ������
-    int m; // ����� ���
+    int n; // число вершин
+    int m; // число дуг
     int origin; 
     int destination;
     int weight;
     int cur_distance;
 
-    ifstream fin("graph.txt");
+    ifstream fin;
+    //fin.open("graph.txt");
+    fin.open("C:\\Users\\Касаткины\\source\\repos\\Structs_and_Algs\\Graph\\graph.txt");
     fin >> n >> m;
     Graph graph(n), graph_reverse(n);
     for (size_t i = 0; i < m; ++i)
@@ -61,7 +63,7 @@ int main()
     vector<int> distances(n, numeric_limits<int>::max());
     distances[sorted[0]] = 0;
 
-    for (auto v : sorted)
+    for (auto v : sorted) // релаксация рёбер в соотв. с сортировкой
     {
         for (auto u : graph_reverse[v])
         {
@@ -71,6 +73,7 @@ int main()
         }
     }
 
+    
     for (auto it : distances)
     {
         cout << it << " ";
