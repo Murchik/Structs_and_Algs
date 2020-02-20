@@ -1,22 +1,30 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <limits>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-struct Edge // дуга графа 
+struct Edge
 {
+    int to;
+    int weight;
+};
+
+struct undirectedEdge
+{
+    int from;
     int to;
     int weight;
 };
 
 using Graph = vector<vector<Edge>>;
 
-
-void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)// Depth-first search
+// Depth-first search
+void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)
 {
     Used[start] = true;
-
     for (auto it : graph[start])
     {
         if (!Used[it.to])
@@ -25,7 +33,8 @@ void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)//
     List.push_back(start);
 }
 
-vector<int> TopSort(const Graph &graph) // сортировка вершин
+// Topological sort
+vector<int> TopSort(const Graph &graph)
 {
     vector<int> sorted;
     vector<bool> Used(graph.size());
@@ -37,33 +46,106 @@ vector<int> TopSort(const Graph &graph) // сортировка вершин
     return sorted;
 }
 
+// disjoint-set / union–find data structure
+class DSU
+{
+    public:
+    vector<size_t> leaders;
+    vector<size_t> sizes;
+    DSU(size_t n) : leaders(n), sizes(n, 1)
+    {
+        size_t size = leaders.size();
+        for (size_t i = 0; i < size; ++i)
+            leaders[i] = i;
+    }
+    size_t find(size_t v)
+    {
+        if (leaders[v] != v)
+            leaders[v] = find(leaders[v]);
+        return leaders[v];
+    }
+    bool join(size_t u, size_t v)
+    {
+        u = find(u);
+        v = find(v);
+        if (u == v)
+            return false;
+        if (sizes[u] < sizes[v])
+            leaders[u] = v;
+        else
+            leaders[v] = u;
+        return true;
+    }
+};
+
+void graphPrint(const Graph &graph)
+{
+    size_t n = graph.size();
+    for (size_t i = 0; i < n; ++i)
+    {
+        size_t m = graph[i].size();
+        cout << "v[" << i << "]:\t";
+        for (size_t j = 0; j < m; ++j)
+        {
+            cout << graph[i][j].to << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void edgesPrint(const vector<undirectedEdge> &tree)
+{
+    int n = tree.size();
+    for (int i = 0; i < n; i++)
+    {
+        cout << tree[i].from << " "
+             << tree[i].to << " "
+             << tree[i].weight 
+             << endl;
+    }
+}
+
+bool comp(undirectedEdge first, undirectedEdge second) 
+    { return (first.weight < second.weight); }
+
 int main()
 {
-    int n; // число вершин
-    int m; // число дуг
-    int origin; 
+    ifstream fin("graph.txt", ifstream::in);
+    if (!fin.is_open())
+    {
+        cout << "Error opening file" << endl;
+        return -1;
+    }
+
+    int n; // number of vertices
+    int m; // number of edges
+    fin >> n >> m;
+
+    Graph graph(n), graph_reverse(n);
+    vector<undirectedEdge> edges(m);
+    vector<int> sorted;
+    vector<int> distances(n, numeric_limits<int>::max());
+    int origin;
     int destination;
     int weight;
-    int cur_distance;
 
-    ifstream fin;
-    //fin.open("graph.txt");
-    fin.open("C:\\Users\\Касаткины\\source\\repos\\Structs_and_Algs\\Graph\\graph.txt");
-    fin >> n >> m;
-    Graph graph(n), graph_reverse(n);
-    for (size_t i = 0; i < m; ++i)
+    for (int i = 0; i < m; ++i)
     {
         fin >> origin >> destination >> weight;
+
+        edges[i].from = origin;
+        edges[i].to = destination;
+        edges[i].weight = weight;
+
         graph[origin].push_back({destination, weight});
         graph_reverse[destination].push_back({origin, weight});
     }
 
-    auto sorted = TopSort(graph);
-
-    vector<int> distances(n, numeric_limits<int>::max());
+    int cur_distance;
+    sorted = TopSort(graph);
     distances[sorted[0]] = 0;
-
-    for (auto v : sorted) // релаксация рёбер в соотв. с сортировкой
+    for (auto v : sorted)
     {
         for (auto u : graph_reverse[v])
         {
@@ -73,11 +155,23 @@ int main()
         }
     }
 
-    
-    for (auto it : distances)
+    for (int i = 0; i < n; ++i)
     {
-        cout << it << " ";
+        cout << distances[i] << " ";
     }
     cout << endl;
+
+    DSU set(n);
+    sort(edges.begin(), edges.end(), comp);
+
+    for (int i = 0; i < m; ++i)
+    {
+        if (set.join(edges[i].from, edges[i].to))
+            cout << edges[i].from << " " 
+                 << edges[i].to << " " 
+                 << edges[i].weight 
+                 << endl;
+    }
+
     return 0;
 }
