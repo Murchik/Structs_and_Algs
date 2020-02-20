@@ -46,11 +46,8 @@ int main()
     int weight;
     int cur_distance;
 
-    setlocale(LC_ALL, "RUS");
     ifstream fin;
     //fin.open("graph.txt");
-
-
     fin.open("C:\\Users\\Касаткины\\source\\repos\\Structs_and_Algs\\Graph\\graph.txt");
     fin >> n >> m;
     Graph graph(n), graph_reverse(n);
@@ -60,7 +57,7 @@ int main()
         graph[origin].push_back({destination, weight});
         graph_reverse[destination].push_back({origin, weight});
     }
-    
+
     auto sorted = TopSort(graph);
 
     vector<int> distances(n, numeric_limits<int>::max());
