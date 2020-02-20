@@ -5,7 +5,7 @@
 
 using namespace std;
 
-struct Edge
+struct Edge // дуга графа 
 {
     int to;
     int weight;
@@ -13,8 +13,8 @@ struct Edge
 
 using Graph = vector<vector<Edge>>;
 
-// Depth-first search
-void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)
+
+void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)// Depth-first search
 {
     Used[start] = true;
     for (auto it : graph[start])
@@ -25,7 +25,7 @@ void DFS(int start, const Graph &graph, vector<bool> &Used, vector<int> &List)
     List.push_back(start);
 }
 
-vector<int> TopSort(const Graph &graph)
+vector<int> TopSort(const Graph &graph) // сортировка вершин
 {
     vector<int> sorted;
     vector<bool> Used(graph.size());
