@@ -51,8 +51,7 @@ class DSU
 {
     public:
     vector<size_t> leaders;
-    vector<size_t> sizes;
-    DSU(size_t n) : leaders(n), sizes(n, 1)
+    DSU(size_t n) : leaders(n)
     {
         size_t size = leaders.size();
         for (size_t i = 0; i < size; ++i)
@@ -70,41 +69,10 @@ class DSU
         v = find(v);
         if (u == v)
             return false;
-        if (sizes[u] < sizes[v])
-            leaders[u] = v;
-        else
-            leaders[v] = u;
+        leaders[v] = u;
         return true;
     }
 };
-
-void graphPrint(const Graph &graph)
-{
-    size_t n = graph.size();
-    for (size_t i = 0; i < n; ++i)
-    {
-        size_t m = graph[i].size();
-        cout << "v[" << i << "]:\t";
-        for (size_t j = 0; j < m; ++j)
-        {
-            cout << graph[i][j].to << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
-void edgesPrint(const vector<undirectedEdge> &tree)
-{
-    int n = tree.size();
-    for (int i = 0; i < n; i++)
-    {
-        cout << tree[i].from << " "
-             << tree[i].to << " "
-             << tree[i].weight 
-             << endl;
-    }
-}
 
 bool comp(undirectedEdge first, undirectedEdge second) 
     { return (first.weight < second.weight); }
@@ -126,8 +94,6 @@ int main()
 
     Graph graph(n), graph_reverse(n);
     vector<undirectedEdge> edges(m);
-    vector<int> sorted;
-    vector<int> distances(n, numeric_limits<int>::max());
     int origin;
     int destination;
     int weight;
@@ -145,9 +111,10 @@ int main()
     }
 
     int cur_distance;
-    sorted = TopSort(graph);
+    vector<int> sorted = TopSort(graph);    
+    vector<int> distances(n, numeric_limits<int>::max());
     distances[sorted[0]] = 0;
-    for (auto v : sorted) // relaxation of ribs in accordance with the sorting
+    for (auto v : sorted)
     {
         for (auto u : graph_reverse[v])
         {
