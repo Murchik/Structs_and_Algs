@@ -1,16 +1,12 @@
 #include <iostream>
-#include <vector>
-
 #include "tree.hpp"
 
 int main()
 {
     using namespace std;
-    using Node = struct Node;
 
     BinTree tree;
     Node *rez;
-    vector<int> List; // ??
 
     tree.insert(9);
     tree.insert(11);
@@ -29,11 +25,41 @@ int main()
     else
         cout << "Element " << 1 << " not found" << endl;
 
-    Node *localRoot = tree.getRoot();
-    cout << endl
-         << "Tree traversal here:" << endl;
-    tree.postTraversal(localRoot);
+    cout << endl;
+
+    rez = tree.getRoot();
+    cout << "Tree pre-traversal here:\n ";
+    tree.preTraversal(rez);
+    cout << endl;
+
+    rez = tree.getRoot();
+    cout << "Tree in-traversal here:\n ";
+    tree.inTraversal(rez);
+    cout << endl;
+
+    rez = tree.getRoot();
+    cout << "Tree post-traversal here:\n ";
+    tree.postTraversal(rez);
+    cout << endl;
+
+    cout << endl;
+
+    rez = tree.min();
+    cout << "min element: " << rez->data << endl;
+
+    rez = tree.max();
+    cout << "max element: " << rez->data << endl;
+
+    cout << endl;
+    
+    for (int i = 7; i < 11; ++i)
+    {
+        rez = tree.next(i);
+        cout << "next element for "<< i <<": " << rez->data << endl;
+        rez = tree.prev(i);
+        cout << "prev element for "<< i <<": " << rez->data << endl;
+        cout << endl;
+    }
 
     return 0;
-    //for (auto i : Sorted) cout << i << " ";
 }
