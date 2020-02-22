@@ -1,10 +1,15 @@
 #include <iostream>
+#include <vector>
+
+using namespace std;
 
 struct Node
 {
-    struct Node *left = nullptr;
-    struct Node *right = nullptr;
-    struct Node *parent = nullptr;
+
+	
+    Node *left=nullptr;
+    Node *right=nullptr;
+    Node *parent= nullptr;
     int data;
 
     ~Node()
@@ -17,26 +22,35 @@ struct Node
 class BinTree
 {
 private:
-    struct Node *root;
-
+    Node *root;
+	int count;
 public:
-    BinTree()
-    {
-        root = nullptr;
-    }
-
+	BinTree() 
+	{
+		root = nullptr;
+		count = 0;
+	}
+	
+	int GetCount()
+	{
+		return count;
+	}
+	Node* GetRoot() 
+	{
+		return root;
+	}
     ~BinTree()
     {
         delete root;
     }
-
+	
     void insert(int value)
     {
-        struct Node *newElement;
-        struct Node *current;
-        struct Node *parent;
-
+        Node *newElement;
+        Node *current;
+        Node *parent;
         current = root;
+		count++;
         if (current == nullptr)
         {
             newElement = new Node;
@@ -56,6 +70,7 @@ public:
                 parent = current;
                 current = current->left;
             }
+			
         } while (current != nullptr);
         newElement = new Node;
         newElement->parent = parent;
@@ -66,9 +81,9 @@ public:
             parent->right = newElement;
     }
 
-    struct Node *search(int key)
+    Node *search(int key)
     {
-        struct Node *current;
+        Node *current;
         current = root;
         while (current != nullptr && current->data != key)
         {
@@ -79,12 +94,33 @@ public:
         }
         return current;
     }
+	
+	
+
+	void PostTraversal(Node *current)
+	{
+		
+		if (current == nullptr) 
+		{
+			
+			return;
+		}
+		
+		PostTraversal(current->left);
+		
+		PostTraversal(current->right);
+		cout << current->data << endl;
+		
+	}
+
 };
 
 int main()
 {
+	using Node = struct Node;
     BinTree tree;
-    struct Node *rez;
+    Node *rez;
+	vector<int> List;
 
     tree.insert(9);
     tree.insert(11);
@@ -102,6 +138,12 @@ int main()
         std::cout << "Found element: " << rez->data << std::endl;
     else
         std::cout << "Element " << 1 << " not found" << std::endl;
-    
-    return 0;
+	
+   
+
+	auto localRoot = tree.GetRoot();
+	cout << endl << "Tree traversal here:" << endl;
+	tree.PostTraversal(localRoot);
+	return 0;
+	//for (auto i : Sorted) std::cout << i << " ";
 }
