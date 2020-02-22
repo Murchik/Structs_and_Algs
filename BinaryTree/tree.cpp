@@ -10,6 +10,7 @@ int main()
 
     BinTree tree;
     Node *rez;
+    vector<int> List; // ??
 
     tree.insert(9);
     tree.insert(11);
@@ -34,4 +35,5 @@ int main()
     tree.postTraversal(localRoot);
 
     return 0;
+    //for (auto i : Sorted) cout << i << " ";
 }
