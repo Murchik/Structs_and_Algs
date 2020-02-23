@@ -35,17 +35,15 @@ class BinTree
 {
 private:
     Node *root;
-    
 
 public:
-    BinTree() : root(nullptr) {};
-   
+    BinTree() : root(nullptr){};
+
     ~BinTree()
     {
         delete root;
     }
 
-    
     Node *getRoot()
     {
         return root;
@@ -87,9 +85,5 @@ public:
     // (*) TODO: Удаление узла
     void erase(int key);
 };
-
-// ========================================================================= //
-
-
 
 #endif

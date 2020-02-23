@@ -51,13 +51,13 @@ int main()
     cout << "max element: " << rez->data << endl;
 
     cout << endl;
-    
+
     for (int i = 7; i < 11; ++i)
     {
         rez = tree.next(i);
-        cout << "next element for "<< i <<": " << rez->data << endl;
+        cout << "next element for " << i << ": " << rez->data << endl;
         rez = tree.prev(i);
-        cout << "prev element for "<< i <<": " << rez->data << endl;
+        cout << "prev element for " << i << ": " << rez->data << endl;
         cout << endl;
     }
 

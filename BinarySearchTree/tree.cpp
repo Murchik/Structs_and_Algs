@@ -1,8 +1,8 @@
 #include "tree.hpp"
 
-Node* BinTree::search(int key)
+Node *BinTree::search(int key)
 {
-    Node* current;
+    Node *current;
     current = root;
     while (current != nullptr && current->data != key)
     {
@@ -14,7 +14,7 @@ Node* BinTree::search(int key)
     return current;
 }
 
-void BinTree::preTraversal(Node* current)
+void BinTree::preTraversal(Node *current)
 {
     if (current == nullptr)
         return;
@@ -23,7 +23,7 @@ void BinTree::preTraversal(Node* current)
     preTraversal(current->right);
 }
 
-void BinTree::inTraversal(Node* current)
+void BinTree::inTraversal(Node *current)
 {
     if (current == nullptr)
         return;
@@ -32,7 +32,7 @@ void BinTree::inTraversal(Node* current)
     inTraversal(current->right);
 }
 
-void BinTree::postTraversal(Node* current) const
+void BinTree::postTraversal(Node *current) const
 {
     if (current == nullptr)
         return;
@@ -41,15 +41,15 @@ void BinTree::postTraversal(Node* current) const
     std::cout << current->data << " ";
 }
 
-Node* BinTree::min()
+Node *BinTree::min()
 {
-    Node* current = root;
+    Node *current = root;
     while (current->left != nullptr)
         current = current->left;
     return current;
 }
 
-Node* BinTree::min(Node* current)
+Node *BinTree::min(Node *current)
 {
     if (current != nullptr)
     {
@@ -59,15 +59,15 @@ Node* BinTree::min(Node* current)
     return current;
 }
 
-Node* BinTree::max()
+Node *BinTree::max()
 {
-    Node* current = root;
+    Node *current = root;
     while (current->right != nullptr)
         current = current->right;
     return current;
 }
 
-Node* BinTree::max(Node* current)
+Node *BinTree::max(Node *current)
 {
     if (current != nullptr)
     {
@@ -78,15 +78,15 @@ Node* BinTree::max(Node* current)
 }
 
 /* TODO:
-     Íå ó÷ò¸í ñëó÷àé, êîãäà ýëåìåíòà äëÿ êîòîðîãî
-    òðåáóåòñÿ íàéòè ñëåäóþùèé íå ñóùåñòâóåò.
-     Íå ó÷ò¸í ñëó÷àé, êîãäà äëÿ çàäàííîãî ýëåìåíòà
-    íå ñóùåñòâóåò ñëåäóþùåãî.
+     ÐÐµ ÑƒÑ‡Ñ‚Ñ‘Ð½ ÑÐ»ÑƒÑ‡Ð°Ð¹, ÐºÐ¾Ð³Ð´Ð° ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð´Ð»Ñ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð³Ð¾
+    Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ Ð½Ð°Ð¹Ñ‚Ð¸ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ð¹ Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚.
+     ÐÐµ ÑƒÑ‡Ñ‚Ñ‘Ð½ ÑÐ»ÑƒÑ‡Ð°Ð¹, ÐºÐ¾Ð³Ð´Ð° Ð´Ð»Ñ Ð·Ð°Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
+    Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ³Ð¾.
 */
-Node* BinTree::next(int key)
+Node *BinTree::next(int key)
 {
-    Node* current = search(key);
-    Node* parent = current->parent;
+    Node *current = search(key);
+    Node *parent = current->parent;
     if (current->right != nullptr)
     {
         current = min(current->right);
@@ -105,15 +105,15 @@ Node* BinTree::next(int key)
 }
 
 /* TODO:
-     Íå ó÷ò¸í ñëó÷àé, êîãäà ýëåìåíòà äëÿ êîòîðîãî
-    òðåáóåòñÿ íàéòè ïðåäûäóùèé íå ñóùåñòâóåò.
-     Íå ó÷ò¸í ñëó÷àé, êîãäà äëÿ çàäàííîãî ýëåìåíòà
-    íå ñóùåñòâóåò ïðåäûäóùåãî.
+     ÐÐµ ÑƒÑ‡Ñ‚Ñ‘Ð½ ÑÐ»ÑƒÑ‡Ð°Ð¹, ÐºÐ¾Ð³Ð´Ð° ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð´Ð»Ñ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð³Ð¾
+    Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ Ð½Ð°Ð¹Ñ‚Ð¸ Ð¿Ñ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰Ð¸Ð¹ Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚.
+     ÐÐµ ÑƒÑ‡Ñ‚Ñ‘Ð½ ÑÐ»ÑƒÑ‡Ð°Ð¹, ÐºÐ¾Ð³Ð´Ð° Ð´Ð»Ñ Ð·Ð°Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
+    Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚ Ð¿Ñ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰ÐµÐ³Ð¾.
 */
-Node* BinTree::prev(int key)
+Node *BinTree::prev(int key)
 {
-    Node* current = search(key);
-    Node* parent = current->parent;
+    Node *current = search(key);
+    Node *parent = current->parent;
     if (current->left != nullptr)
     {
         current = max(current->left);
@@ -133,9 +133,9 @@ Node* BinTree::prev(int key)
 
 void BinTree::insert(int value)
 {
-    Node* newElement;
-    Node* current;
-    Node* parent;
+    Node *newElement;
+    Node *current;
+    Node *parent;
 
     current = root;
 
