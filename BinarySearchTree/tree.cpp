@@ -170,7 +170,16 @@ void BinTree::insert(int value)
         parent->right = newElement;
 }
 
-void erase(int key)
+void BinTree::erase(int key)
 {
-    // INSERT YOUR CODE HERE
+    Node* current = BinTree::search(key); // root
+    
+    
+    if ((current->left == nullptr) && (current->right == nullptr)) // leaf
+    {
+        current->parent = nullptr;
+        delete current;
+    }
+
+    
 }
