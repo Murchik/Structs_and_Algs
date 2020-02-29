@@ -36,6 +36,8 @@ class BinTree
 private:
     Node *root;
 
+    void transplant(Node* current, Node* swap);
+
 public:
     BinTree() : root(nullptr){};
 
@@ -84,6 +86,9 @@ public:
 
     // (*) TODO: Удаление узла
     void erase(int key);
+
+    friend std::ostream& operator<< (std::ostream& , const BinTree& );
+    
 };
 
 #endif

@@ -170,16 +170,71 @@ void BinTree::insert(int value)
         parent->right = newElement;
 }
 
-void BinTree::erase(int key)
+
+
+
+
+
+void BinTree::transplant(Node* current, Node* swap) 
 {
-    Node* current = BinTree::search(key); // root
+    Node* parentcur;
+
+    parentcur = current->parent;
     
-    
-    if ((current->left == nullptr) && (current->right == nullptr)) // leaf
+
+
+    if (parentcur == nullptr) 
     {
-        current->parent = nullptr;
-        delete current;
+        root = swap;
+    }
+    else
+    if (parentcur->left == current) 
+    {
+        parentcur->left = swap;
+    }
+    else
+    {
+        parentcur->right = swap;
     }
 
+    if (swap != nullptr) 
+    {
+        swap->parent = parentcur;
+    }
+}
+
+void BinTree::erase(int key)
+{
+    Node* current = search(key);
+    Node* parent;
+    parent = current->parent;
     
+    
+    if (current->left == nullptr) 
+    {
+        transplant(current, current->right);
+    }
+    else if (current->right==nullptr)
+    {
+        transplant(current, current->left);
+    }
+    else
+    {
+        Node* min = this->min(current->right);
+        if (min != current->right) 
+        {
+            transplant(min, min->right);
+            min->right = current->right;
+            min->right->parent = min;
+        }
+
+        transplant(current, min);
+        min->left = current->left;
+        min->left->parent = min;
+
+    }
+    current->left = current->right= nullptr;
+    
+    delete current;
+
 }
