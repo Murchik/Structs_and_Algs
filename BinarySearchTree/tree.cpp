@@ -253,5 +253,5 @@ void BinTree::erase(int key)
     
     std::cout << "Deletion result(pre-traversal):" << std::endl;
     preTraversal(root);
-
+    std::cout << std::endl;
 }

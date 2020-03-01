@@ -14,6 +14,7 @@ int main()
     tree.insert(8);
     tree.insert(10);
     tree.insert(6);
+    tree.insert(12);
 
     if ((rez = tree.search(6)) != nullptr)
         cout << "Found element: " << rez->data << endl;
@@ -61,8 +62,9 @@ int main()
         cout << endl;
     }
 
-    
-    
+    tree.erase(6);
+    tree.erase(7);
+    tree.erase(11);
 
     return 0;
 }
