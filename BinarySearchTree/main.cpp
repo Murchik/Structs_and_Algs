@@ -1,70 +1,94 @@
 #include <iostream>
+#include <fstream>
+#include <locale>
 #include "tree.hpp"
 
 int main()
 {
     using namespace std;
+    setlocale(LC_ALL, "RUS");
+    cout << "\t\t\"Реализация двоичного дерева поиска\"" << endl
+         << "Выберете действие: " << endl
+         << "\t1. Создать бинарное дерево." << endl
+         << "\t2. Найти узел с заданным значением ключа." << endl
+         << "\t3. Вставить отдельный узел." << endl
+         << "\t4. Вывести обратный обход дерева." << endl
+         << "\t5. Найти узел с максимальным значением ключа." << endl
+         << "\t6. Удаление узла с заданным ключём." << endl
+         << "\t0. Завершить работу." << endl;
 
+    int value;
+    int action;
+    ifstream fin;
     BinTree tree;
     Node *rez;
 
-    tree.insert(9);
-    tree.insert(11);
-    tree.insert(7);
-    tree.insert(8);
-    tree.insert(10);
-    tree.insert(6);
-    tree.insert(12);
-
-    if ((rez = tree.search(6)) != nullptr)
-        cout << "Found element: " << rez->data << endl;
-    else
-        cout << "Element " << 6 << " not found" << endl;
-
-    if ((rez = tree.search(1)) != nullptr)
-        cout << "Found element: " << rez->data << endl;
-    else
-        cout << "Element " << 1 << " not found" << endl;
-
-    cout << endl;
-
-    rez = tree.getRoot();
-    cout << "Tree pre-traversal here:\n ";
-    tree.preTraversal(rez);
-    cout << endl;
-
-    rez = tree.getRoot();
-    cout << "Tree in-traversal here:\n ";
-    tree.inTraversal(rez);
-    cout << endl;
-
-    rez = tree.getRoot();
-    cout << "Tree post-traversal here:\n ";
-    tree.postTraversal(rez);
-    cout << endl;
-
-    cout << endl;
-
-    rez = tree.min();
-    cout << "min element: " << rez->data << endl;
-
-    rez = tree.max();
-    cout << "max element: " << rez->data << endl;
-
-    cout << endl;
-
-    for (int i = 7; i < 11; ++i)
+    action = -1;
+    while (action != 0)
     {
-        rez = tree.next(i);
-        cout << "next element for " << i << ": " << rez->data << endl;
-        rez = tree.prev(i);
-        cout << "prev element for " << i << ": " << rez->data << endl;
-        cout << endl;
+        cin >> action;
+        switch (action)
+        {
+        case 1:
+            fin.open("tree.txt", ifstream::in);
+            if (!fin.is_open())
+            {
+                cout << "Ошибка открытия файла tree.txt" << endl;
+                break;
+            }
+            while (fin.good())
+            {
+                fin >> value;
+                tree.insert(value);
+            }
+            cout << "Дерево успешно считано из файла." << endl;
+            break;
+        case 2:
+            cout << "Введите значение для поиска: ";
+            cin >> value;
+            rez = tree.search(value);
+            if (rez != nullptr)
+                cout << "Узел " << rez->data << " найден" << endl;
+            else
+                cout << "Узла со значением " << value << " не найдено!" << endl;
+            break;
+        case 3:
+            cout << "Введите значение для вставки: ";
+            cin >> value;
+            tree.insert(value);
+            break;
+        case 4:
+            if (tree.isCreated())
+            {
+                cout << "Обратный обход дерева: " << endl;
+                tree.postTraversal();
+                cout << endl;
+            }
+            else
+                cout << "Дерево пустое!" << endl;
+            break;
+        case 5:
+            rez = tree.max();
+            if (rez != nullptr)
+                cout << "Узел с максимальным значением ключа: " << rez->data << endl;
+            else
+                cout << "Максимального элемента не найдено!" << endl;
+            break;
+        case 6:
+            cout << "Введите значение для удаления: ";
+            cin >> value;
+            if (tree.erase(value) == 0)
+                cout << "Узел с задданым значением успешно удалён." << endl;
+            else
+                cout << "Ключ заданный для удаления не найден!" << endl;
+            break;
+        case 0:
+            cout << "Завершение работы программы..." << endl;
+            break;
+        default:
+            cout << "Выбрано неверное действие!" << endl;
+            break;
+        }
     }
-
-    tree.erase(6);
-    tree.erase(7);
-    tree.erase(11);
-
     return 0;
 }

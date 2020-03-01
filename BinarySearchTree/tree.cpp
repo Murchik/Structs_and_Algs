@@ -2,8 +2,7 @@
 
 Node *BinTree::search(int key)
 {
-    Node *current;
-    current = root;
+    Node *current = root;
     while (current != nullptr && current->data != key)
     {
         if (key < current->data)
@@ -12,6 +11,11 @@ Node *BinTree::search(int key)
             current = current->right;
     }
     return current;
+}
+
+void BinTree::preTraversal()
+{
+    preTraversal(root);
 }
 
 void BinTree::preTraversal(Node *current)
@@ -23,6 +27,11 @@ void BinTree::preTraversal(Node *current)
     preTraversal(current->right);
 }
 
+void BinTree::inTraversal()
+{
+    inTraversal(root);
+}
+
 void BinTree::inTraversal(Node *current)
 {
     if (current == nullptr)
@@ -32,7 +41,12 @@ void BinTree::inTraversal(Node *current)
     inTraversal(current->right);
 }
 
-void BinTree::postTraversal(Node *current) const
+void BinTree::postTraversal()
+{
+    postTraversal(root);
+}
+
+void BinTree::postTraversal(Node *current)
 {
     if (current == nullptr)
         return;
@@ -43,12 +57,9 @@ void BinTree::postTraversal(Node *current) const
 
 Node *BinTree::min()
 {
-    Node *current = root;
-    while (current->left != nullptr)
-        current = current->left;
-    return current;
+    Node *result = min(root);
+    return result;
 }
-
 Node *BinTree::min(Node *current)
 {
     if (current != nullptr)
@@ -61,12 +72,9 @@ Node *BinTree::min(Node *current)
 
 Node *BinTree::max()
 {
-    Node *current = root;
-    while (current->right != nullptr)
-        current = current->right;
-    return current;
+    Node *result = max(root);
+    return result;
 }
-
 Node *BinTree::max(Node *current)
 {
     if (current != nullptr)
@@ -77,23 +85,17 @@ Node *BinTree::max(Node *current)
     return current;
 }
 
-
 Node *BinTree::next(int key)
 {
     Node *current = search(key);
     Node *parent = current->parent;
 
-    if (current == nullptr) 
-    {
-        std::cout << "no key element found" << std::endl;
+    if (current == nullptr)
         return nullptr;
-    }
 
-    if (current == max(root)) 
-    {
-        std::cout << "no element greater than current" << std::endl;
+    if (current == max(root))
         return nullptr;
-    }
+
     if (current->right != nullptr)
     {
         current = min(current->right);
@@ -111,23 +113,15 @@ Node *BinTree::next(int key)
     return current->parent;
 }
 
-
 Node *BinTree::prev(int key)
 {
     Node *current = search(key);
 
-    if (current == nullptr) 
-    {
-        std::cout << "no key element found" << std::endl;
+    if (current == nullptr)
         return nullptr;
-    }
 
-    if (current == min(root)) 
-    {
-        std::cout << "no element less than given" << std::endl;
+    if (current == min(root))
         return nullptr;
-    }
-    
 
     Node *parent = current->parent;
     if (current->left != nullptr)
@@ -174,7 +168,6 @@ void BinTree::insert(int value)
             parent = current;
             current = current->left;
         }
-
     } while (current != nullptr);
 
     newElement = new Node(value);
@@ -186,72 +179,51 @@ void BinTree::insert(int value)
         parent->right = newElement;
 }
 
-
-
-
-void BinTree::transplant(Node* current, Node* swap) 
+void BinTree::transplant(Node *current, Node *swap)
 {
-    Node* parentcur;
+    Node *parent = current->parent;
 
-    parentcur = current->parent;
-    
-
-
-    if (parentcur == nullptr) 
-    {
+    if (parent == nullptr)
         root = swap;
-    }
-    else
-    if (parentcur->left == current) 
-    {
-        parentcur->left = swap;
-    }
     else
     {
-        parentcur->right = swap;
+        if (parent->left == current)
+            parent->left = swap;
+        else
+            parent->right = swap;
     }
-
-    if (swap != nullptr) 
-    {
-        swap->parent = parentcur;
-    }
+    if (swap != nullptr)
+        swap->parent = parent;
 }
 
-void BinTree::erase(int key)
+int BinTree::erase(int key)
 {
-    Node* current = search(key);
-    Node* parent;
-    parent = current->parent;
-    
-    
-    if (current->left == nullptr) 
-    {
+    Node *current = search(key);
+
+    if (current == nullptr)
+        return -1;
+
+    if (current->left == nullptr)
         transplant(current, current->right);
-    }
-    else if (current->right==nullptr)
-    {
-        transplant(current, current->left);
-    }
     else
     {
-        Node* min = this->min(current->right);
-        if (min != current->right) 
+        if (current->right == nullptr)
+            transplant(current, current->left);
+        else
         {
-            transplant(min, min->right);
-            min->right = current->right;
-            min->right->parent = min;
+            Node *min = this->min(current->right);
+            if (min != current->right)
+            {
+                transplant(min, min->right);
+                min->right = current->right;
+                min->right->parent = min;
+            }
+            transplant(current, min);
+            min->left = current->left;
+            min->left->parent = min;
         }
-
-        transplant(current, min);
-        min->left = current->left;
-        min->left->parent = min;
-
     }
-    current->left = current->right= nullptr;
-    
+    current->left = current->right = nullptr;
     delete current;
-    
-    std::cout << "Deletion result(pre-traversal):" << std::endl;
-    preTraversal(root);
-    std::cout << std::endl;
+    return 0;
 }
