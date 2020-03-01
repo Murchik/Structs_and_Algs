@@ -77,16 +77,23 @@ Node *BinTree::max(Node *current)
     return current;
 }
 
-/* TODO:
-     Не учтён случай, когда элемента для которого
-    требуется найти следующий не существует.
-     Не учтён случай, когда для заданного элемента
-    не существует следующего.
-*/
+
 Node *BinTree::next(int key)
 {
     Node *current = search(key);
     Node *parent = current->parent;
+
+    if (current == nullptr) 
+    {
+        std::cout << "no key element found" << std::endl;
+        return nullptr;
+    }
+
+    if (current == max(root)) 
+    {
+        std::cout << "no element greater than current" << std::endl;
+        return nullptr;
+    }
     if (current->right != nullptr)
     {
         current = min(current->right);
@@ -104,15 +111,24 @@ Node *BinTree::next(int key)
     return current->parent;
 }
 
-/* TODO:
-     Не учтён случай, когда элемента для которого
-    требуется найти предыдущий не существует.
-     Не учтён случай, когда для заданного элемента
-    не существует предыдущего.
-*/
+
 Node *BinTree::prev(int key)
 {
     Node *current = search(key);
+
+    if (current == nullptr) 
+    {
+        std::cout << "no key element found" << std::endl;
+        return nullptr;
+    }
+
+    if (current == min(root)) 
+    {
+        std::cout << "no element less than given" << std::endl;
+        return nullptr;
+    }
+    
+
     Node *parent = current->parent;
     if (current->left != nullptr)
     {
@@ -169,8 +185,6 @@ void BinTree::insert(int value)
     else
         parent->right = newElement;
 }
-
-
 
 
 
@@ -236,5 +250,8 @@ void BinTree::erase(int key)
     current->left = current->right= nullptr;
     
     delete current;
+    
+    std::cout << "Deletion result(pre-traversal):" << std::endl;
+    preTraversal(root);
 
 }
