@@ -1,0 +1,2 @@
+D:\repos\Structs_and_Algs\DataSortAlgs\VS\x64\Debug\Datasort.exe
+D:\repos\Structs_and_Algs\DataSortAlgs\VS\x64\Debug\Datasort.pdb
