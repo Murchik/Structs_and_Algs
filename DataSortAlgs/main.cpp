@@ -1,16 +1,18 @@
 #include "func.hpp"
-using namespace std;
+
 
 int main() 
 
 {
     
-    vector<int> vec;
+    std::vector<int> vec(readVec());
+    
 
-    readVec(vec);
-   /* shakeSort(array);
+    printVec(vec);
 
-    shake(array);
+    
+    shakeSort(vec);
+    /*shake(array);
     shellSort(array);*/
 
     return 0;
