@@ -1,19 +1,23 @@
 #include "func.hpp"
 
+#define MAXELEM 10000
 
-int main() 
+int main() {
+    std::vector<int> vec(MAXELEM);
 
-{
-    
-    std::vector<int> vec(readVec());
-    
+    for (size_t i = 0; i < MAXELEM; ++i) {
+        vec[i] = rand() % 1000;
+    }
 
-    printVec(vec);
+    //printVec(vec);
 
-    
     shakeSort(vec);
-    /*shake(array);
-    shellSort(array);*/
+
+    for (size_t i = 0; i < MAXELEM; ++i) {
+        vec[i] = rand() % 1000;
+    }
+
+    shellSort(vec);
 
     return 0;
 }
