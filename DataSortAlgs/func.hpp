@@ -5,7 +5,7 @@
 #include <iterator>
 #include <vector>
 
-std::vector<int> readVec();
+
 
 template <class Arr>
 void printVec(const Arr& input) 
@@ -35,6 +35,10 @@ void shakeSort(Arr &input)
             {
                 std::swap(input[i], input[i + 1]);
                 swapped = true;
+                if (input.size() == 10)
+                {
+                    printVec(input);
+                }
             }
             ++compCount;
         }
@@ -51,6 +55,11 @@ void shakeSort(Arr &input)
             {
                 std::swap(input[i], input[i + 1]);
                 swapped = true;
+                if (input.size() == 10)
+                {
+                    printVec(input);
+                }
+                
             }
             ++compCount;
         }
@@ -81,9 +90,13 @@ void shellSort(Arr &array)
 
     for (h = size / 2; h > 0; h /= 2)
         for (i = h; i < size; i++)
-            for (j = i - h; j >= 0 && array[j] > array[j + h];
-                j -= h, ++compCount)
+            for (j = i - h; j >= 0 && array[j] > array[j + h]; j -= h, ++compCount)
+            {
                 std::swap(array[j], array[j + h]);
+                if(array.size()==10)
+                printVec(array);
+            }
+                
 
     auto endTimer = std::chrono::high_resolution_clock::now();
 
