@@ -29,7 +29,7 @@ void shakeSort(Arr &input)
     {
         swapped = false;
 
-        for (int i = start; i < end; ++i) 
+        for (int i = start; i < end; ++i, ++compCount) 
         {
             if (input[i] > input[i + 1]) 
             {
@@ -42,14 +42,18 @@ void shakeSort(Arr &input)
             }
             ++compCount;
         }
-        if (!swapped) 
+        if (!swapped)
+        {
+            ++compCount;
             break;
+        }
+            
         
 
         swapped = false;
         --end;
 
-        for (int i = end - 1; i >= start; --i) 
+        for (int i = end - 1; i >= start; --i, ++compCount) 
         {
             if (input[i] > input[i + 1]) 
             {
@@ -72,7 +76,7 @@ void shakeSort(Arr &input)
 
     std::chrono::duration<double> duration = endTimer - startTimer;
     std::cout << "Comparisons: " << compCount << std::endl
-              << "Time spend: " << duration.count() << "s" << std::endl
+              << "Time spent: " << duration.count() << "s" << std::endl
               << std::endl;
 
     
@@ -88,9 +92,9 @@ void shellSort(Arr &array)
 
     auto startTimer = std::chrono::high_resolution_clock::now();
 
-    for (h = size / 2; h > 0; h /= 2)
-        for (i = h; i < size; i++)
-            for (j = i - h; j >= 0 && array[j] > array[j + h]; j -= h, ++compCount)
+    for (h = size / 2; h > 0; h /= 2, ++compCount)
+        for (i = h; i < size; i++, ++compCount)
+            for (j = i - h; j >= 0 && array[j] > array[j + h]; j -= h, compCount+=2)
             {
                 std::swap(array[j], array[j + h]);
                 if(array.size()==10)
@@ -102,6 +106,6 @@ void shellSort(Arr &array)
 
     std::chrono::duration<double> duration = endTimer - startTimer;
     std::cout << "Comparisons: " << compCount << std::endl
-              << "Time spend: " << duration.count() << "s" << std::endl
+              << "Time spent: " << duration.count() << "s" << std::endl
               << std::endl;
 }
