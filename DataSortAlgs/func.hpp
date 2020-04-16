@@ -24,7 +24,7 @@ void shakeSort(Arr &input) {
 
         for (int i = start; i < end; ++i, ++compCount) {
             ++compCount;
-            if (input[i] > input[i + 1]) {
+            if (input[i] < input[i + 1]) {
                 std::swap(input[i], input[i + 1]);
                 swapped = true;
                 printVec(input);
@@ -42,7 +42,7 @@ void shakeSort(Arr &input) {
 
         for (int i = end - 1; i >= start; --i, ++compCount) {
             ++compCount;
-            if (input[i] > input[i + 1]) {
+            if (input[i] < input[i + 1]) {
                 std::swap(input[i], input[i + 1]);
                 swapped = true;
                 printVec(input);
@@ -73,7 +73,7 @@ void shellSort(Arr &array) {
 
     for (h = size / 2; h > 0; h /= 2, ++compCount)
         for (i = h; i < size; i++, ++compCount)
-            for (j = i - h; j >= 0 && array[j] > array[j + h];
+            for (j = i - h; j >= 0 && array[j] < array[j + h];
                  j -= h, compCount += 2) {
                 std::swap(array[j], array[j + h]);
                 printVec(array);
